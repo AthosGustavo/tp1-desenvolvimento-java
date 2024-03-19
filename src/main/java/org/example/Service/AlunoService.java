@@ -10,10 +10,20 @@ import java.util.stream.Collectors;
 
 public class AlunoService {
 
-    ArrayList<Aluno> listaDeAlunos = new ArrayList<>();
-    public void adicionaAlunoService(AlunoDTO alunoDTO){
+
+    private ArrayList<Aluno> listaDeAlunos = new ArrayList<>();
+
+    public ArrayList<Aluno> getListaDeAlunos() {
+        return listaDeAlunos;
+    }
+
+    public void setListaDeAlunos(ArrayList<Aluno> listaDeAlunos) {
+        this.listaDeAlunos = listaDeAlunos;
+    }
+
+    public boolean adicionaAlunoService(AlunoDTO alunoDTO){
         Aluno aluno = new Aluno(alunoDTO);
-        listaDeAlunos.add(aluno);
+        return listaDeAlunos.add(aluno);
     };
     public String removeAlunoService(String matricula){
 
@@ -23,7 +33,7 @@ public class AlunoService {
             Aluno aluno = iterator.next();
 
             if (aluno.getMatricula().equals(matricula)) {
-                iterator.remove(); // Removes the current aluno from the list
+                iterator.remove();
                 mensagem = String.format("O aluno %s de matrícula %s foi removido.",aluno.getNome(), aluno.getMatricula());
             }
         }
@@ -63,4 +73,5 @@ public class AlunoService {
         }
         return mensagem;
     }
+
 }

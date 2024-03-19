@@ -1,6 +1,8 @@
 package org.example;
 
 import org.example.Controller.AlunoController;
+import org.example.Service.AlunoService;
+import org.example.Exceptions.InvalidParameterException;
 
 import java.sql.SQLOutput;
 import java.util.Scanner;
@@ -10,7 +12,7 @@ public class Main {
     System.out.println("Entrando no programa");
     Scanner scanner = new Scanner(System.in);
     boolean teste = true;
-    AlunoController alunoController = new AlunoController();
+    AlunoController alunoController = new AlunoController(new AlunoService());
 
     while(teste) {
       System.out.println("1 para:Cadastrar um aluno");
@@ -20,25 +22,50 @@ public class Main {
       System.out.println("0 para:Sair do programa\n");
       System.out.printf("Digite um número:");
       int numeroDigitado = scanner.nextInt();
-
+      scanner.nextLine();
 
       switch (numeroDigitado) {
         case 1:
           System.out.printf("Digite o nome do aluno:");
-          String nome = scanner.next();
+          String nome = scanner.nextLine();
+
           System.out.printf("Digite a idade do aluno:");
-          int idade = scanner.nextInt();
-          scanner.nextLine();
+          String idadeStr = scanner.nextLine();
+//          scanner.nextLine();
+
           System.out.printf("Digite o curso do aluno:");
           String curso = scanner.nextLine();
           System.out.printf("Digite a média do aluno:");
-          double media = scanner.nextDouble();
-          scanner.nextLine();
-          System.out.println("==============================");
-          System.out.println("\nAluno adicionado com sucesso!\n");
-          System.out.println("==============================");
+          String mediaStr = scanner.nextLine();
+          //scanner.nextLine();
 
-          alunoController.adicionaAlunoController(nome, idade, curso, media);
+          int idade = 0;
+          double media = 0;
+          boolean excecaoAcionada = false;
+
+            if(idadeStr != ""){
+              idade = Integer.parseInt(idadeStr);
+            }else{
+              excecaoAcionada = true;
+              throw new InvalidParameterException(InvalidParameterException.argumentoInvalidoMetodoAdicionaAluno("Idade inválida"));
+            }
+
+            if(mediaStr != ""){
+              media = Double.parseDouble(mediaStr);
+            }else{
+              excecaoAcionada = true;
+              throw new InvalidParameterException(InvalidParameterException.argumentoInvalidoMetodoAdicionaAluno("Média inválida"));
+            }
+
+
+          if(!excecaoAcionada){
+            if(alunoController.adicionaAlunoController(nome, idade, curso, media)){
+              System.out.println("==============================");
+              System.out.println("\nAluno adicionado com sucesso!\n");
+              System.out.println("==============================");
+            }
+          }
+
           break;
         case 2:
           System.out.printf("Digite a matrícula do aluno:");
